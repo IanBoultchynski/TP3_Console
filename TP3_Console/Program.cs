@@ -108,7 +108,6 @@ namespace TP3_Console
             Utilisateur utilisateurAviNoteMax = ctx.Utilisateurs.First(user => user.Idutilisateur == (ctx.Avis.First(avi => avi.Note == ctx.Avis.Max(avi => avi.Note))).Idutilisateur);
             Console.WriteLine($"L'utilisateur avec la note la plus élevée est l'{utilisateurAviNoteMax.ToString()}");
         }
-
     }
 }
 
