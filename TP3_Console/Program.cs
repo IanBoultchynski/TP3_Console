@@ -9,7 +9,7 @@ namespace TP3_Console
 
         static void Main(string[] args)
         {
-            Exo2Q9();
+            AjouterFilms();
             Console.ReadKey();
         }
         public static void Exo2Q1()
@@ -107,6 +107,98 @@ namespace TP3_Console
 
             Utilisateur utilisateurAviNoteMax = ctx.Utilisateurs.First(user => user.Idutilisateur == (ctx.Avis.First(avi => avi.Note == ctx.Avis.Max(avi => avi.Note))).Idutilisateur);
             Console.WriteLine($"L'utilisateur avec la note la plus élevée est l'{utilisateurAviNoteMax.ToString()}");
+        }
+
+
+
+        public static void AjoutUtilisateur()
+        {
+            var ctx = new FilmsDbContext();
+            var user = new Utilisateur()
+            {
+                Login = "bouvimae",
+                Email = "mael.bouvier-sobrino@etu.univ-smb.fr",
+                Pwd = "password"
+            };
+
+            ctx.Utilisateurs.Add(user);
+            ctx.SaveChanges();
+        }
+
+
+        public static void ModifierFilm()
+        {
+            var ctx = new FilmsDbContext();
+            Film filmDouzesSinges = ctx.Films.First(c => c.Nom.ToLower() == "l'armee des douze singes");
+            filmDouzesSinges.Description = "Un film de science fiction réalisé par Terry Gilliam, sorti en 1995. Date de modification : " + DateTime.Now;
+            filmDouzesSinges.Idcategorie = ctx.Categories.First(c => c.Nom.ToLower() == "drame").Idcategorie;
+
+            ctx.SaveChanges();
+        }
+
+        public static void DeleteFilm()
+        {
+            var ctx = new FilmsDbContext();
+            Film filmDouzesSinges = ctx.Films.First(c => c.Nom.ToLower() == "l'armee des douze singes");
+            var avisFilmsDouzesSinges = ctx.Avis.Where(avi => avi.Idfilm == filmDouzesSinges.Idfilm);
+            if (avisFilmsDouzesSinges != null)
+            {
+                foreach (var avi in avisFilmsDouzesSinges)
+                {
+                    ctx.Avis.Remove(avi);
+                }
+            }
+            ctx.Films.Remove(filmDouzesSinges);
+            ctx.SaveChanges();
+        }
+
+        public static void AjouterAvis()
+        {
+            var ctx = new FilmsDbContext();
+
+            Film FilmPrefere = ctx.Films.First(c => c.Nom.ToLower() == "matrix");
+            Utilisateur moi = ctx.Utilisateurs.First(u => u.Login.ToLower() == "bouvimae");
+
+            var avi = new Avi()
+            {
+                Idfilm = FilmPrefere.Idfilm,
+                Idutilisateur = moi.Idutilisateur,
+                Note = 5,
+                Commentaire = "Un chef d'oeuvre du cinéma !"
+            };
+
+            ctx.Avis.Add(avi);
+            ctx.SaveChanges();
+        }
+
+        public static void AjouterFilms()
+        {
+            var ctx = new FilmsDbContext();
+
+            var film1 = new Film()
+            {
+                Nom = "Film 1",
+                Description = "Description du film 1",
+                Idcategorie = ctx.Categories.First(c => c.Nom.ToLower() == "drame").Idcategorie
+            };
+
+            var film2 = new Film()
+            {
+                Nom = "Film 2",
+                Description = "Description du film 2",
+                Idcategorie = ctx.Categories.First(c => c.Nom.ToLower() == "drame").Idcategorie
+            };
+
+            ctx.Films.Add(film1);
+            ctx.Films.Add(film2);
+
+            //  ATTENTION IL FAUT BIEN PENSER A REMETTRE LA SEQUENCE A JOUR DANS LA BASE
+
+            //  ALTER TABLE film ENABLE TRIGGER ALL; 
+            //  SELECT pg_catalog.setval(pg_get_serial_sequence('film', 'idfilm'), MAX(idfilm)) FROM
+            //  film;
+
+            ctx.SaveChanges();
         }
     }
 }
