@@ -29,7 +29,7 @@ public partial class FilmsDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseLoggerFactory(MyLoggerFactory)
             .EnableSensitiveDataLogging()
-            .UseNpgsql("Server=localhost;port=5432;Database=FilmsDB; uid=postgres; password=0821;")
+            .UseNpgsql("Server=localhost;port=5432;Database=FilmsDB; uid=postgres; password=postgres;")
             .UseLazyLoadingProxies();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
