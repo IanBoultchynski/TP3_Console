@@ -31,14 +31,4 @@ public partial class Categorie
     [InverseProperty(nameof(Film.IdcategorieNavigation))]
     public virtual ICollection<Film> Films { get; set; } = new List<Film>();
 
-    //private ICollection<Film> films;
-    //[InverseProperty(nameof(Film.IdcategorieNavigation))]
-    //public virtual ICollection<Film> Films
-    //{
-    //    get
-    //    {
-    //        return _lazyLoader.Load(this, ref films);
-    //    }
-    //    set { films = value; }
-    //}
 }
